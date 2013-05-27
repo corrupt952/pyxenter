@@ -4,7 +4,7 @@ from setuptools import setup
 
 NAME = 'pyxenter'
 
-VERSION = '1.0.0'
+VERSION = '1.0.1'
 
 DESCRIPTION = 'ESXi Server and Xen Server control script.'
 
