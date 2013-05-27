@@ -20,14 +20,21 @@ def download_file(url,directory_path):
     
     
     def progress(block_count, block_size, total_size):
-        u"""現在どのくらいダウンロードされているかを把握する
+        u"""Download animation
        
-        @param block_count
-        @param block_size
-        @param total_size
+        @param block_count Download file block count
+        @param block_size  Download file block size
+        @param total_size  Download file total size
         """
         percentage = 100.0 * block_count * block_size / total_size
-        print "%4.1f %% (%dKB)\r" % (percentage, total_size / 1024) ,
+        sys.stdout.write('[')
+        for i in range(50):
+            if percentage <= (i + 1) * 2:
+                sys.stdout.write(' ')
+            else:
+                sys.stdout.write('#')
+        sys.stdout.write(']')
+        print " %.0f %% (%d KB)\r" % (percentage, total_size / 1024),
    
     urllib.urlretrieve(
         url = url,
