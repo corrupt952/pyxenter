@@ -1,10 +1,9 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 
 def args():
-    u"""引数のパーサを構築
+    u"""Set argument
     
-    パーサを構築し、構築したパーサのargumentを返す
-    @return 構築したパーサのargument
+    @return argument
     """
     # Import
     import argparse
