@@ -50,16 +50,16 @@ def args():
     
     # Deploy parser
     deploy_parser = subparsers.add_parser('import',  help     = 'Import VM image command.')
-    destroy_parser.add_argument('-H', '--host',      dest     = 'host',
+    deploy_parser.add_argument('-H', '--host',      dest     = 'host',
                               type   = str,          default  = None,
                               help   = 'Host IPv4 address.')
-    destroy_parser.add_argument('-u', '--user',      dest     = 'user',
+    deploy_parser.add_argument('-u', '--user',      dest     = 'user',
                               type   = str,          default  = None,
                               help   = 'User name.')
-    destroy_parser.add_argument('-p', '--password',  dest     = 'passwd',
+    deploy_parser.add_argument('-p', '--password',  dest     = 'passwd',
                               type   = str ,         default  = None,
                               help   = 'Password.')
-    # Destroy group
+    # Deploy group
     deploy_group = deploy_parser.add_mutually_exclusive_group()
     deploy_group.add_argument( '--file',         dest    = 'file_path',
                                type = str,       default = None,
@@ -74,7 +74,7 @@ def args():
                                type = str,       default = None,
                                help = 'Datacenter name.')
     deploy_parser.add_argument('--datastore',    dest    = 'datastore',
-                               type = str, 　     default = None,
+                               type = str,       default = None,
                                help = 'Datastore name.')
     deploy_parser.add_argument('--resourcepool', dest    = 'resource_pool',
                                type = str,       default = None,

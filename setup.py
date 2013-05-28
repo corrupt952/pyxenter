@@ -15,27 +15,69 @@ Requirements
 ------------
 * Python 2.7
 
+
 Features
 --------
 * nonthing
 
-Examples
---------
-ESXi Server has VM List.
+
+ESXi Examples
+-------------
+VM List.
 ::
 
     $ esxi list -H [IPv4 Address of Server] -u [User name] -p [Password]
+    
+VM powered on.
+::
 
-Xen Server has VM List.
+    $ esxi on -H [IPv4 Address of Server] -u [User name] -p [Password] -n [VM name]
+
+Get IPv4 address of VM.(Installed VMware tools)
+::
+
+    $ esxi ip -H [IPv4 Address of Server] -u [User name] -p [Password] -n [VM name]
+
+Import OVF or OVA file with File path.
+::
+
+    $ esxi import -H [IPv4 Address of Server] -u [User name] -p [Password] --file [OVF or OVA File path] -n [New VM name]
+
+Import OVA file with URL.
+::
+
+    $ esxi import -H [IPv4 Address of Server] -u [User name] -p [Password] --url [OVA URL] -n [New VM name]
+
+
+Xen Examples
+------------
+VM List.
 ::
 
     $ xen list -U [URL of Server] -u [User name] -p [Password]
+
+VM powered on.
+::
+
+    $ xen on -U [URL of Server] -u [User name] -p [Password] -n [VM name]
+
+Get IPv4 address of VM.(Installed Xen tools)
+::
+
+    $ xen ip -U [URL of Server] -u [User name] -p [Password] -n [VM name]
+
+Xen VM install with template.
+::
+
+    $ xen install -U [URL of Server] -u [User name] -p [Password] -n [New VM name] -t [Template name]
+
 
 Installation
 ------------
 ::
 
     $ easy_install pyxenter
+
 
 License
 -------
