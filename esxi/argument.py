@@ -5,13 +5,13 @@ def args():
     
     @return argument
     """
-    # Import 
+    # from subcommands import 
     import argparse
-    import list
-    import destroy
-    import deploy
-    import getip
-    import power
+    from subcommands import list
+    from subcommands import destroy
+    from subcommands import deploy
+    from subcommands import getip
+    from subcommands import power
     
     # Parent parser
     parser = argparse.ArgumentParser(description='ESXi Tools')

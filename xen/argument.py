@@ -7,11 +7,11 @@ def args():
     """
     # Import
     import argparse
-    import list
-    import destroy
-    import install
-    import power
-    import getip
+    from subcommands import list
+    from subcommands import destroy
+    from subcommands import install
+    from subcommands import power
+    from subcommands import getip
    
     # Parent parser
     parser = argparse.ArgumentParser(description='Xen tool')

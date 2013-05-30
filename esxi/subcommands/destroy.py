@@ -18,9 +18,10 @@ def set_parsers(subparsers):
     destroy_parser.add_argument('-p', '--password', dest='passwd',
                                 type=str, default=None,
                                 help='Password.')
-    destroy_parser.add_argument('-n', '--name', dest='vm_name',
+    destroy_parser.add_argument('-n', '--name', dest='vm_names',
                                 type=str, default=None,
-                                help='Target VM Name.', required=True)
+                                help='Target VM Name.', required=True,
+                                nargs='+')
     destroy_parser.set_defaults(func=destroy_vm)
 
 
@@ -34,9 +35,15 @@ def destroy_vm(args, server):
     from pysphere import VIApiException, VIException
     import lib
 
-    try:
-        lib.delete_vm_by_name(args.vm_name, server)
-    except VIApiException:
-        raise Exception('Cannot deleted.')
-    except VIException:
-        raise Exception('Not found VM.')
+    vm_names = args.vm_names
+    for vm_name in vm_names:
+        try:
+            lib.delete_vm_by_name(vm_name, server)
+        except VIApiException:
+            print 'Cannot deleted.'
+            break
+        except VIException:
+            print 'Not found VM.'
+            break
+
+        print '%s Done.' % vm_name

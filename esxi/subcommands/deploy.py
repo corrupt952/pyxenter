@@ -27,9 +27,10 @@ def set_parsers(subparsers):
                               type=str, default=None,
                               help='OVA File URL.')
 
-    deploy_parser.add_argument('-n', '--name', dest='vm_name',
+    deploy_parser.add_argument('-n', '--name', dest='vm_names',
                                type=str, default=None,
-                               help='New VM name.', required=True)
+                               help='New VM name.', required=True,
+                               nargs='+')
     deploy_parser.add_argument('--datacenter', dest='datacenter',
                                type=str, default=None,
                                help='Datacenter name.')
@@ -54,13 +55,13 @@ def deploy_vm(args, server):
     """
     # Import
     import os
-    import sys
     import shutil
     from pysphere import VIMor
     import lib
 
     download_temp = './temp/'
     extract_temp = None
+
     try:
         # Download
         if args.file_url:
@@ -90,9 +91,6 @@ def deploy_vm(args, server):
         MF_FILE = ovf_filepath.replace('.ovf', '.mf')
         if os.path.exists(MF_FILE):
             os.remove(MF_FILE)
-
-        # New VM name
-        vapp_name = args.vm_name
 
         # Host
         if not args.datacenter:
@@ -127,24 +125,36 @@ def deploy_vm(args, server):
         descriptor_info = lib.parse_descriptor(ovf, server)
         support_info = lib.validate_host(host_name, ovf, server)
 
-        # Create spec
-        import_spec = lib.create_import_spec(resource_pool_name,
-                                             datastore_name,
-                                             ovf, vapp_name,
+        vm_names = args.vm_names
+        for vm_name in vm_names:
+            if server.get_vm_by_name(vm_name):
+                print 'Already Exists VM.'
+                break
+
+            # New VM name
+            vapp_name = vm_name
+
+            # Create spec
+            import_spec = lib.create_import_spec(resource_pool_name,
+                                                 datastore_name,
+                                                 ovf, vapp_name,
+                                                 host=host_name,
+                                                 network=network_name,
+                                                 server=server)
+
+            if hasattr(import_spec, "Warning"):
+                print "Warning", import_spce.Warning[0].LocalizedMessage
+
+            http_nfc_lease = lib.import_vapp(resource_pool_name,
+                                             import_spec,
                                              host=host_name,
-                                             network=network_name,
                                              server=server)
 
-        if hasattr(import_spec, "Warning"):
-            print "Warning", import_spce.Warning[0].LocalizedMessage
+            # Http request
+            lib.lease(http_nfc_lease, ovf_filepath, server)
 
-        http_nfc_lease = lib.import_vapp(resource_pool_name,
-                                         import_spec,
-                                         host=host_name,
-                                         server=server)
+            print '%s Done.' % vm_name
 
-        # Http request
-        lib.lease(http_nfc_lease, ovf_filepath, server)
     finally:
         # Remove
         if os.path.exists(download_temp):

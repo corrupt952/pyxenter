@@ -13,7 +13,7 @@ def main():
     import getpass
     import sys
     from pysphere import VIApiException, VIServer
-    from subcommands import argument
+    import argument
 
     # Get argument
     args = argument.args()

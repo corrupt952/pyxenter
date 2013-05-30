@@ -33,9 +33,10 @@ def set_parsers(subparsers):
     power_off_parser.add_argument('-p', '--password', dest='passwd',
                                   type=str, default=None,
                                   help='Password.')
-    power_off_parser.add_argument('-n', '--name', dest='vm_name',
+    power_off_parser.add_argument('-n', '--name', dest='vm_names',
                                   type=str, default=None,
-                                  help='Target VM Name.', required=True)
+                                  help='Target VM Name.', required=True,
+                                  nargs='+')
     power_off_parser.set_defaults(func=power, power='OFF')
 
 
@@ -48,11 +49,16 @@ def power(args, server):
     # Import
     import lib
 
-    vm = server.get_vm_by_name(args.vm_name)
-    if vm:
-        if args.power == 'ON':
-            lib.powered_on(vm, server)
-        elif args.power == 'OFF':
-            lib.powered_off(vm, server)
-    else:
-        raise Exception('Not found VM.')
+    vm_names = args.vm_names
+    for vm_name in vm_names:
+        vm = server.get_vm_by_name(vm_name)
+        if vm:
+            if args.power == 'ON':
+                lib.powered_on(vm, server)
+            elif args.power == 'OFF':
+                lib.powered_off(vm, server)
+        else:
+            print 'Not found VM.'
+            break
+
+        print '%s Done.' % vm_name

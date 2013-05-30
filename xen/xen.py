@@ -12,7 +12,7 @@ def main():
     import socket
     import sys
 
-    from subcommands import argument
+    import argument
     import XenAPI
 
     # Get argument
