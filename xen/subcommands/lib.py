@@ -56,10 +56,10 @@ def get_storage_vdis(vm, session):
     for vbd in vbds:
         vdi = session.xenapi.VBD.get_VDI(vbd)
         vdi_records = session.xenapi.VDI.get_all_records()
-        xenstore_data = vdi_records[vdi]['xenstore_data']
-        if vdi.split(':')[1] != 'NULL' \
-                and xenstore_data != {}:
-            vdis.append(vdi)
+        if vdi.split(':')[1] != 'NULL':
+            xenstore_data = vdi_records[vdi]['xenstore_data']
+            if xenstore_data != {}:
+                vdis.append(vdi)
     return vdis
 
 
@@ -238,14 +238,14 @@ def install(vm_name, template_name, session):
     session.xenapi.VM.get_name_label(template)
     print "Installing..."
     vm = session.xenapi.VM.clone(template, vm_name)
+    # Template flag
+    session.xenapi.VM.set_is_a_template(vm, False)
+    session.xenapi.VM.set_PV_args(vm, "noninteractive")
     vbds = session.xenapi.VM.get_VBDs(vm)
     for vbd in vbds:
         vdis = get_storage_vdis(vm, session)
         for vdi in vdis:
-            vm_name = session.xenapi.VM.get_name_label(vm)
             session.xenapi.VDI.set_name_label(vdi, vm_name)
-    # Template flag
-    session.xenapi.VM.set_is_a_template(vm, False)
-    session.xenapi.VM.set_PV_args(vm, "noninteractive")
+            
 
     return vm

@@ -36,7 +36,7 @@ def show_vm_list(args, session):
 
     print
     print '|          Name         |  Power   |    IP Address    |'
-    print '----------------------------------------------------------------'
+    print '-------------------------------------------------------'
     for vm in vms:
         record = session.xenapi.VM.get_record(vm)
         if not record["is_control_domain"] \

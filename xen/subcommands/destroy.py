@@ -41,11 +41,13 @@ def destroy(args, session):
             try:
                 print 'Destroying...'
                 vdis = lib.get_storage_vdis(vm, session)
-                for vdi in vdis:
-                    session.xenapi.VDI.destroy(vdi)
-                    session.xenapi.VM.destroy(vm)
-                    print '%s Done.' % vm_name
-            except:
+                if vdis:
+                    for vdi in vdis:
+                        session.xenapi.VDI.destroy(vdi)
+                    
+                session.xenapi.VM.destroy(vm)
+                print '%s Done.' % vm_name
+            except Exception, e:
                 print 'Please shutdown for VM.'
         else:
             print 'Not found VM.'
