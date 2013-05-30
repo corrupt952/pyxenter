@@ -129,31 +129,30 @@ def deploy_vm(args, server):
         for vm_name in vm_names:
             if server.get_vm_by_name(vm_name):
                 print 'Already Exists VM.'
-                break
+            else:
+                # New VM name
+                vapp_name = vm_name
 
-            # New VM name
-            vapp_name = vm_name
+                # Create spec
+                import_spec = lib.create_import_spec(resource_pool_name,
+                                                     datastore_name,
+                                                     ovf, vapp_name,
+                                                     host=host_name,
+                                                     network=network_name,
+                                                     server=server)
 
-            # Create spec
-            import_spec = lib.create_import_spec(resource_pool_name,
-                                                 datastore_name,
-                                                 ovf, vapp_name,
+                if hasattr(import_spec, "Warning"):
+                    print "Warning", import_spce.Warning[0].LocalizedMessage
+
+                http_nfc_lease = lib.import_vapp(resource_pool_name,
+                                                 import_spec,
                                                  host=host_name,
-                                                 network=network_name,
                                                  server=server)
 
-            if hasattr(import_spec, "Warning"):
-                print "Warning", import_spce.Warning[0].LocalizedMessage
+                # Http request
+                lib.lease(http_nfc_lease, ovf_filepath, server)
 
-            http_nfc_lease = lib.import_vapp(resource_pool_name,
-                                             import_spec,
-                                             host=host_name,
-                                             server=server)
-
-            # Http request
-            lib.lease(http_nfc_lease, ovf_filepath, server)
-
-            print '%s Done.' % vm_name
+                print '%s Done.' % vm_name
 
     finally:
         # Remove

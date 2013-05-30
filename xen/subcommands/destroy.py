@@ -17,9 +17,10 @@ def set_parsers(subparsers):
     destroy_parser.add_argument('-p', '--password', dest='passwd',
                                 type=str, default=None,
                                 help='User password.')
-    destroy_parser.add_argument('-n', '--name', dest='vm_name',
+    destroy_parser.add_argument('-n', '--name', dest='vm_names',
                                 type=str, default=None,
-                                help='Target VM Name.', required=True)
+                                help='Target VM Name.', required=True,
+                                nargs='+')
     destroy_parser.set_defaults(func=destroy)
 
 
@@ -32,17 +33,19 @@ def destroy(args, session):
     # Import
     import lib
 
-    # Set VM name
-    vm = lib.get_vm(args.vm_name, session)
-    if vm:
-        try:
-            print 'Destroying...'
-            vdis = lib.get_storage_vdis(vm, session)
-            for vdi in vdis:
-                session.xenapi.VDI.destroy(vdi)
-                session.xenapi.VM.destroy(vm)
-                print 'Done.'
-        except:
-            raise Exception('Please shutdown for VM.')
-    else:
-        raise Exception('Not found VM.')
+    vm_names = args.vm_names
+    for vm_name in vm_names:
+        # Set VM name
+        vm = lib.get_vm(vm_name, session)
+        if vm:
+            try:
+                print 'Destroying...'
+                vdis = lib.get_storage_vdis(vm, session)
+                for vdi in vdis:
+                    session.xenapi.VDI.destroy(vdi)
+                    session.xenapi.VM.destroy(vm)
+                    print '%s Done.' % vm_name
+            except:
+                print 'Please shutdown for VM.'
+        else:
+            print 'Not found VM.'

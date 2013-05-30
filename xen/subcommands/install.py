@@ -17,9 +17,10 @@ def set_parsers(subparsers):
     install_parser.add_argument('-p', '--password', dest='passwd',
                                 type=str, default=None,
                                 help='User password.')
-    install_parser.add_argument('-n', '--name', dest='vm_name',
+    install_parser.add_argument('-n', '--name', dest='vm_names',
                                 type=str, default=None,
-                                help='New VM name.', required=True)
+                                help='New VM name.', required=True,
+                                nargs='+')
     install_parser.add_argument('-t', '--template', dest='temp_name',
                                 type=str, default=None,
                                 help='VM template name.', required=True)
@@ -35,17 +36,21 @@ def vm_install(args, session):
     # Import
     import lib
 
-    if lib.get_vm(args.vm_name, session):
-        raise Exception('Already exist VM.')
+    vm_names = args.vm_names
+    for vm_name in vm_names:
+        if lib.get_vm(vm_name, session):
+            print 'Already exist VM.'
+        else:
+            # Instal
+            vm = lib.install(vm_name,
+                             args.temp_name,
+                             session)
 
-    # Instal
-    vm = lib.install(args.vm_name, args.temp_name, session)
+            print '%s Done.' % vm_name
 
-    # VM start
-    print 'Starting...'
-    try:
-        session.xenapi.VM.start(vm, False, True)
-    except:
-        raise Exception('Cannot started VM.')
-
-    print 'Done.'
+            # VM start
+            print 'Starting...'
+            try:
+                session.xenapi.VM.start(vm, False, True)
+            except:
+                print 'Cannot started VM.'

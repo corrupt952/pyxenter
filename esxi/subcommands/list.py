@@ -27,15 +27,16 @@ def show_vm_list(args, server):
     @param server Instance of VIServer
     """
     vm_paths = server.get_registered_vms()
-    print
+    print '|          Name          | Power state | IP address |'
     for vm_path in vm_paths:
         vm = server.get_vm_by_path(vm_path)
         print
         # VM name
-        print "VM: %s" % vm.get_property('name')
+        print "| %20s" % vm.get_property('name'),
         # Power state
         power_state = 'Halted'
         if vm.is_powered_on():
             power_state = 'Running'
-        print "Power State: %s" % power_state
+        print "| %11s " % power_state,
+        print "| %10s |" % vm.get_property('ip_address', from_cache=False)
     print

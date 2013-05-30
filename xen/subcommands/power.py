@@ -19,9 +19,10 @@ def set_parsers(subparsers):
     power_on_parser.add_argument('-p', '--password', dest='passwd',
                                  type=str, default=None,
                                  help='User password.')
-    power_on_parser.add_argument('-n', '--name', dest='vm_name',
+    power_on_parser.add_argument('-n', '--name', dest='vm_names',
                                  type=str, default=None,
-                                 help='Target VM Name.', required=True)
+                                 help='Target VM Name.', required=True,
+                                 nargs='+')
     power_on_parser.set_defaults(func=power, power='ON')
     # OFF
     power_off_parser = subparsers.add_parser('off',
@@ -35,9 +36,10 @@ def set_parsers(subparsers):
     power_off_parser.add_argument('-p', '--password', dest='passwd',
                                   type=str, default=None,
                                   help='User password.')
-    power_off_parser.add_argument('-n', '--name', dest='vm_name',
+    power_off_parser.add_argument('-n', '--name', dest='vm_names',
                                   type=str, default=None,
-                                  help='Target VM Name.', required=True)
+                                  help='Target VM Name.', required=True,
+                                  nargs='+')
     power_off_parser.set_defaults(func=power, power='OFF')
     # Reboot
     power_reboot_parser = subparsers.add_parser('reboot',
@@ -51,9 +53,10 @@ def set_parsers(subparsers):
     power_reboot_parser.add_argument('-p', '--password', dest='passwd',
                                      type=str, default=None,
                                      help='User password.')
-    power_reboot_parser.add_argument('-n', '--name', dest='vm_name',
+    power_reboot_parser.add_argument('-n', '--name', dest='vm_names',
                                      type=str, default=None,
-                                     help='Target VM Name.', required=True)
+                                     help='Target VM Name.', required=True,
+                                     nargs='+')
     power_reboot_parser.set_defaults(func=power, power='Reboot')
     # Suspend
     power_suspend_parser = subparsers.add_parser('suspend',
@@ -67,9 +70,10 @@ def set_parsers(subparsers):
     power_suspend_parser.add_argument('-p', '--password', dest='passwd',
                                       type=str, default=None,
                                       help='User password.')
-    power_suspend_parser.add_argument('-n', '--name', dest='vm_name',
+    power_suspend_parser.add_argument('-n', '--name', dest='vm_names',
                                       type=str, default=None,
-                                      help='Target VM Name.', required=True)
+                                      help='Target VM Name.', required=True,
+                                      nargs='+')
     power_suspend_parser.set_defaults(func=power, power='Suspend')
     # Paused
     power_pause_parser = subparsers.add_parser('paused',
@@ -83,9 +87,10 @@ def set_parsers(subparsers):
     power_pause_parser.add_argument('-p', '--password', dest='passwd',
                                     type=str, default=None,
                                     help='User password.')
-    power_pause_parser.add_argument('-n', '--name', dest='vm_name',
+    power_pause_parser.add_argument('-n', '--name', dest='vm_names',
                                     type=str, default=None,
-                                    help='Target VM Name.', required=True)
+                                    help='Target VM Name.', required=True,
+                                    nargs='+')
     power_pause_parser.set_defaults(func=power, power='Paused')
 
 
@@ -99,27 +104,29 @@ def power(args, session):
     import sys
     import lib
 
-    # Get VM
-    vm = lib.get_vm(args.vm_name, session)
+    vm_names = args.vm_names
+    for vm_name in vm_names:
+        # Get VM
+        vm = lib.get_vm(vm_name, session)
 
-    if vm:
-        try:
-            if args.power == 'ON':
-                # Powered on
-                lib.powered_on(vm, session)
-            elif args.power == 'OFF':
-                # Powered off
-                lib.powered_off(vm, session)
-            elif args.power == 'Reboot':
-                # Reboot
-                lib.reboot(vm, session)
-            elif args.power == 'Suspend':
-                # Suspend
-                lib.suspend(vm, session)
-            else:
-                # Pause
-                lib.pause(vm, session)
-        except:
-            raise Exception('Power Error for VM.')
-    else:
-        raise Exception('Not found VM.')
+        if vm:
+            try:
+                if args.power == 'ON':
+                    # Powered on
+                    lib.powered_on(vm, session)
+                elif args.power == 'OFF':
+                    # Powered off
+                    lib.powered_off(vm, session)
+                elif args.power == 'Reboot':
+                    # Reboot
+                    lib.reboot(vm, session)
+                elif args.power == 'Suspend':
+                    # Suspend
+                    lib.suspend(vm, session)
+                else:
+                    # Pause
+                    lib.pause(vm, session)
+            except:
+                print 'Power Error for VM.'
+        else:
+            print 'Not found VM.'

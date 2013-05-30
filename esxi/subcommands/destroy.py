@@ -39,11 +39,8 @@ def destroy_vm(args, server):
     for vm_name in vm_names:
         try:
             lib.delete_vm_by_name(vm_name, server)
+            print '%s Done.' % vm_name
         except VIApiException:
             print 'Cannot deleted.'
-            break
         except VIException:
             print 'Not found VM.'
-            break
-
-        print '%s Done.' % vm_name

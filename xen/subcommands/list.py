@@ -35,7 +35,7 @@ def show_vm_list(args, session):
     vms = session.xenapi.VM.get_all()
 
     print
-    print '|      Name     |  Power   |    Xen Tools   |    IP Address    |'
+    print '|          Name         |  Power   |    IP Address    |'
     print '----------------------------------------------------------------'
     for vm in vms:
         record = session.xenapi.VM.get_record(vm)
@@ -43,8 +43,7 @@ def show_vm_list(args, session):
                 and not 'Transfer' in record["name_label"] \
                 and record["is_a_template"] == args.template:
             # Print VMs
-            print "| %12s " % record['name_label'] ,
-            print "| %7s " % record['power_state'] ,
+            print "| %20s " % record['name_label'],
+            print "| %7s " % record['power_state'],
             tool_state = record['guest_metrics'].split(':')[1]
-            print "| %13s " % ('Installed' if tool_state != 'NULL' else 'Not installed'),
             print "| %16s |" % lib.get_ip_address(vm, session)

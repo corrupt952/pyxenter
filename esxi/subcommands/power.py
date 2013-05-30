@@ -57,8 +57,7 @@ def power(args, server):
                 lib.powered_on(vm, server)
             elif args.power == 'OFF':
                 lib.powered_off(vm, server)
+
+            print '%s Done.' % vm_name
         else:
             print 'Not found VM.'
-            break
-
-        print '%s Done.' % vm_name
