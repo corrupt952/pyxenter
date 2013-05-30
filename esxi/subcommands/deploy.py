@@ -53,6 +53,7 @@ def deploy_vm(args, server):
     @param args   Commandline argument
     @param server Instance of VIServer
     """
+
     # Import
     import os
     import shutil
@@ -71,7 +72,7 @@ def deploy_vm(args, server):
                 raise Excepiton('File format not supported.')
 
         filepath = args.filepath
-        if os.path.exists(filepath):
+        if not os.path.exists(filepath):
             raise Exception("File not found.")
 
         if filepath.find('.ova') > 0:
@@ -127,7 +128,7 @@ def deploy_vm(args, server):
 
         vm_names = args.vm_names
         for vm_name in vm_names:
-            if server.get_vm_by_name(vm_name):
+            if lib.get_vm_index(server, vm_name) != -1:
                 print 'Already Exists VM.'
             else:
                 # New VM name

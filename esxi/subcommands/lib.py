@@ -255,7 +255,7 @@ def create_import_spec(resource_pool_mor,
     from pysphere import VIApiException
     from pysphere.resources import VimService_services as VI
 
-    if NOT server:
+    if not server:
         raise VIApiException('Not found server.')
     # get the host MOR
     if host:
@@ -433,6 +433,7 @@ def lease(http_nfc_lease, ovf_file_path, server):
     t.start()
 
     # Upload
+    print 'Uploading...'
     upload_format_file(lease, '.vmdk', ovf_file_path, server)
 
     go_on = False

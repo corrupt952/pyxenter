@@ -18,9 +18,10 @@ def set_parsers(subparsers):
     power_on_parser.add_argument('-p', '--password', dest='passwd',
                                  type=str, default=None,
                                  help='Password.')
-    power_on_parser.add_argument('-n', '--name', dest='vm_name',
+    power_on_parser.add_argument('-n', '--name', dest='vm_names',
                                  type=str, default=None,
-                                 help='Target VM Name.', required=True)
+                                 help='Target VM Name.', required=True,
+                                 nargs='+')
     power_on_parser.set_defaults(func=power, power='ON')
     # OFF
     power_off_parser = subparsers.add_parser('off', help='Power off VM.')
