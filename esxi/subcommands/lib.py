@@ -498,7 +498,6 @@ def powered_on(vm, server):
             vm.power_on()
         except:
             raise Exception('Powered error.')
-        print 'Done.'
     else:
         print 'Already Powered On.'
 
@@ -515,7 +514,6 @@ def powered_off(vm, server):
             vm.power_off()
         except:
             raise Exception('Powered error.')
-        print 'Done.'
     else:
         print 'Already Powered Off.'
 
