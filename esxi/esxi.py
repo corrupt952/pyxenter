@@ -1,27 +1,32 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# MAIN #
+
 def main():
+    u"""Main method
+
+    Create session.
+    Excute subcommand.
+    """
     # Import
     import socket
     import getpass
     import sys
     from pysphere import VIApiException, VIServer
-    import esxi_argument
-    
+    from subcommands import argument
+
     # Get argument
-    args = esxi_argument.args()
+    args = argument.args()
     s = VIServer()
-    
+
     # Set information
-    host = raw_input('Host> ') if args.host   == None else args.host
-    user = raw_input('User> ') if args.user   == None else args.user
-    passwd = getpass.getpass('Password> ') if args.passwd == None else args.passwd
+    host = args.host if args.host else raw_input('Host> ')
+    user = args.user if args.user else raw_input('User> ')
+    passwd = args.passwd if args.passwd else getpass.getpass('Password> ')
     try:
         print 'Connecting...'
-        s.connect(host,user,passwd)
-       
+        s.connect(host, user, passwd)
+
         # Execute function
         args.func(args, s)
     except socket.error:
@@ -31,9 +36,10 @@ def main():
     except Exception, e:
         print >> sys.stderr, e.message
     finally:
-        if s.is_connected() == True:
+        if s.is_connected():
             print 'Disconnecting...'
             s.disconnect()
+
 
 if __name__ == '__main__':
     main()

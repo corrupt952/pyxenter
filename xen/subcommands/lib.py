@@ -1,14 +1,15 @@
 # coding: utf-8
 
+
 def get_vm(vm_name, session):
     u"""Getting VM
-    
+
     If exists vm, return VM.
     Otherwise return None.
-    
+
     @param vm_name VM's name
     @param session　Session
-    
+
     @return VM or None
     """
     vm = None
@@ -17,15 +18,16 @@ def get_vm(vm_name, session):
         return vms[0]
     return vm
 
+
 def get_ip_address(vm, session):
     u""" Getting VM IPaddress
-    
+
     If got ip address, return ip address of str type.
     Otherwise return None.
-    
+
     @param vm      VM
     @param session Session
-    
+
     @return Ip address or None
     """
     vgm = session.xenapi.VM.get_guest_metrics(vm)
@@ -37,41 +39,44 @@ def get_ip_address(vm, session):
     except:
         return None
 
+
 def get_storage_vdis(vm, session):
     u"""Get VDIs
-    
+
     Return list has VM's any VDIs.
-    
+
     @param vm      VM
     @param session Session
-    
+
     @return VDI List
     """
     vdis = []
-    
+
     vbds = session.xenapi.VM.get_VBDs(vm)
     for vbd in vbds:
         vdi = session.xenapi.VBD.get_VDI(vbd)
-        if vdi.split(':')[1] <> 'NULL' \
-            and session.xenapi.VDI.get_all_records()[vdi]['xenstore_data'] <> {}:
+        vdi_records = session.xenapi.VDI.get_all_records()
+        xenstore_data = vdi_records[vdi]['xenstore_data']
+        if vdi.split(':')[1] != 'NULL' \
+                and xenstore_data != {}:
             vdis.append(vdi)
     return vdis
 
-# POWERED METHOD #
+
 def powered_on(vm, session):
     u"""VM start
-    
+
     Power state being 'Running'
-    
+
     @param vm      VM
     @param session Session
     """
     # Get power state.
     power_state = session.xenapi.VM.get_power_state(vm)
-   
-    if   power_state == 'Running'  :
+
+    if power_state == 'Running':
         print 'Already powered on.'
-    elif power_state == 'Paused'   :
+    elif power_state == 'Paused':
         print 'Continuing...'
         session.xenapi.VM.unpause(vm)
         print 'Done.'
@@ -83,23 +88,24 @@ def powered_on(vm, session):
         print 'Powered on...'
         session.xenapi.VM.start(vm, False, True)
         print 'Done.'
-   
+
 
 def powered_off(vm, session):
     u"""VM shutdown.
-    
+
     Power state being 'Halted'
     @param vm      VM
     @param session Session
     """
     #　Check Xen tools
     vm_shutdown = session.xenapi.VM.hard_shutdown
-    if session.xenapi.VM.get_record(vm)['guest_metrics'].split(':')[1] <> 'NULL':
+    guest_metrics = session.xenapi.VM.get_record(vm)['guest_metrics']
+    if guest_metrics.split(':')[1] != 'NULL':
         vm_shutdown = session.xenapi.VM.clean_shutdown
-    
+
     # Get power state.
     power_state = session.xenapi.VM.get_power_state(vm)
-    
+
     if power_state == 'Running':
         print 'Powered off...'
         vm_shutdown(vm)
@@ -117,23 +123,25 @@ def powered_off(vm, session):
     else:
         print 'Already powered off.'
 
+
 def reboot(vm, session):
     u"""VM reboot
-    
+
     After power state being 'Halted',
     Power state being 'Running'.
-    
+
     @param vm      VM
     @param session Session
     """
     # Check Xen tools
     vm_reboot = session.xenapi.VM.hard_reboot
-    if session.xenapi.VM.get_record(vm)['guest_metrics'].split(':')[1] <> 'NULL':
+    guest_metrics = session.xenapi.VM.get_record(vm)['guest_metrics']
+    if guest_metrics.split(':')[1] != 'NULL':
         vm_reboot = session.xenapi.VM.clean_reboot
-    
+
     # Get power state.
     power_state = session.xenapi.VM.get_power_state(vm)
-    
+
     if power_state == 'Running':
         print 'Rebooting...'
         vm_reboot(vm)
@@ -151,21 +159,23 @@ def reboot(vm, session):
     else:
         powered_on(vm, session)
 
+
 def suspend(vm, session):
     u"""VM suspend
-    
+
     Power state being 'Suspend'
-    
+
     @param vm      VM
     @param session Session
     """
     # Check Xen tools
-    if session.xenapi.VM.get_record(vm)['guest_metrics'].split(':')[1] == 'NULL':
+    guest_metrics = session.xenapi.VM.get_record(vm)['guest_metrics']
+    if guest_metrics.split(':')[1] != 'NULL':
         raise Exception('Xen tools is not installed.')
-    
+
     # Get power state
     power_state = session.xenapi.VM.get_power_state(vm)
-    
+
     if power_state == 'Running':
         print 'Suspending...'
         session.xenapi.VM.suspend(vm)
@@ -173,17 +183,18 @@ def suspend(vm, session):
     else:
         print 'Cannot suspend.'
 
+
 def pause(vm, session):
     u"""VM pause
-    
+
     Power state being 'Paused'
-    
+
     @param vm      VM
     @param session Session
     """
     # Get power state
     power_state = session.xenapi.VM.get_power_state(vm)
-   
+
     if power_state == 'Running':
         print 'Pausing...'
         session.xenapi.VM.pause(vm)
@@ -191,18 +202,20 @@ def pause(vm, session):
     else:
         print 'Cannot paused.'
 
-# INSTALL METHOD #
+
 def install(vm_name, template_name, session):
     u"""Install New VM, using template
-    
+
     @param vm_name       VM Name
     @param template_name Template Name
     @param session       Session
-    
+
     @return New VM
     """
     pifs = session.xenapi.PIF.get_all_records()
-    lowest = reduce(lambda a, b: min(pifs[a]['device'], pifs[b]['device']), pifs)
+    lowest = reduce(lambda a, b: min(pifs[a]['device'],
+                                     pifs[b]['device']),
+                    pifs)
 
     # Network
     network = session.xenapi.PIF.get_network(lowest)
@@ -229,9 +242,10 @@ def install(vm_name, template_name, session):
     for vbd in vbds:
         vdis = get_storage_vdis(vm, session)
         for vdi in vdis:
-            session.xenapi.VDI.set_name_label(vdi, session.xenapi.VM.get_name_label(vm))
+            vm_name = session.xenapi.VM.get_name_label(vm)
+            session.xenapi.VDI.set_name_label(vdi, vm_name)
     # Template flag
     session.xenapi.VM.set_is_a_template(vm, False)
     session.xenapi.VM.set_PV_args(vm, "noninteractive")
-    
+
     return vm
