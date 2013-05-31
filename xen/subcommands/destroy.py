@@ -44,7 +44,7 @@ def destroy(args, session):
                 if vdis:
                     for vdi in vdis:
                         session.xenapi.VDI.destroy(vdi)
-                    
+
                 session.xenapi.VM.destroy(vm)
                 print '%s Done.' % vm_name
             except Exception, e:

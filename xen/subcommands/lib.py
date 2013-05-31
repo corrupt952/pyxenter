@@ -246,6 +246,5 @@ def install(vm_name, template_name, session):
         vdis = get_storage_vdis(vm, session)
         for vdi in vdis:
             session.xenapi.VDI.set_name_label(vdi, vm_name)
-            
 
     return vm
