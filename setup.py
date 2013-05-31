@@ -43,6 +43,11 @@ Import OVF or OVA file with File path.
 
     $ esxi import -H [IPv4 Address of Server] -u [User name] -p [Password] --file [OVF or OVA File path] -n [New VM name]
 
+Import OVF or OVA file with File path.(Create multiple VM)
+::
+
+    $ esxi import -H [IPv4 Address of Server] -u [User name] -p [Password] --file [OVF or OVA File path] -n [New VM name1] [new VM name2] ...
+
 Import OVA file with URL.
 ::
 
@@ -69,15 +74,30 @@ Get IPv4 address of VM.(Installed Xen tools)
 Xen VM install with template.
 ::
 
-    $ xen install -U [URL of Server] -u [User name] -p [Password] -n [New VM name] -t [Template name]
+    $ xen install -U [URL of Server] -u [User name] -p [Password] -t [Template name] -n [New VM name]
 
+Xen VM install with template.(Create multiple VM)
+::
+
+    $ xen install -U [URL of Server] -u [User name] -p [Password] -t [Template name] -n [New VM name1] [New VM name2] ...
+
+Multiple VM control commands
+----------------------------
+* Powered commands(esxi -> on off, xen -> on off reboot suspend paused)
+* Import commands(esxi -> import, xen -> install)
+* Destroy commands(destroy)
 
 Installation
 ------------
+easy_install:
 ::
 
     $ easy_install pyxenter
 
+pip:
+::
+
+    $ pip install pyxenter
 
 License
 -------
@@ -99,7 +119,7 @@ CLASSIFIERS = [
     'License :: OSI Approved :: BSD License',
     ]
 
-PACKAGES = ['xen', 'esxi']
+PACKAGES = ['xen', 'esxi', 'esxi.subcommands', 'xen.subcommands']
 
 AUTHOR = 'Kazuki Hasegawa'
 
@@ -121,8 +141,11 @@ REQUIRES = [
     ]
 
 KEYWORDS = [
+    'Xen',
     'Xen Server',
+    'VMware',
     'ESXi Server',
+    'VM',
     ]
 
 setup(name             = NAME,

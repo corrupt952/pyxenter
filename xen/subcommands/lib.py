@@ -232,7 +232,7 @@ def install(vm_name, template_name, session):
             if record["name_label"] == template_name:
                 templates.append(vm)
     if templates == []:
-        raise Excenption('Could not find template.')
+        raise Exception('Could not find template.')
 
     template = templates[0]
     session.xenapi.VM.get_name_label(template)
