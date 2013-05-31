@@ -19,10 +19,8 @@ def set_parsers(subparsers):
     power_on_parser.add_argument('-p', '--password', dest='passwd',
                                  type=str, default=None,
                                  help='User password.')
-    power_on_parser.add_argument('-n', '--name', dest='vm_names',
-                                 type=str, default=None,
-                                 help='Target VM Name.', required=True,
-                                 nargs='+')
+    power_on_parser.add_argument('vm_names', type=str,
+                                 help='Target VM Name.', nargs='+')
     power_on_parser.set_defaults(func=power, power='ON')
     # OFF
     power_off_parser = subparsers.add_parser('off',
@@ -36,10 +34,8 @@ def set_parsers(subparsers):
     power_off_parser.add_argument('-p', '--password', dest='passwd',
                                   type=str, default=None,
                                   help='User password.')
-    power_off_parser.add_argument('-n', '--name', dest='vm_names',
-                                  type=str, default=None,
-                                  help='Target VM Name.', required=True,
-                                  nargs='+')
+    power_off_parser.add_argument('vm_names', type=str,
+                                  help='Target VM Name.', nargs='+')
     power_off_parser.set_defaults(func=power, power='OFF')
     # Reboot
     power_reboot_parser = subparsers.add_parser('reboot',
@@ -53,10 +49,8 @@ def set_parsers(subparsers):
     power_reboot_parser.add_argument('-p', '--password', dest='passwd',
                                      type=str, default=None,
                                      help='User password.')
-    power_reboot_parser.add_argument('-n', '--name', dest='vm_names',
-                                     type=str, default=None,
-                                     help='Target VM Name.', required=True,
-                                     nargs='+')
+    power_reboot_parser.add_argument('vm_names', type=str,
+                                     help='Target VM Name.', nargs='+')
     power_reboot_parser.set_defaults(func=power, power='Reboot')
     # Suspend
     power_suspend_parser = subparsers.add_parser('suspend',
@@ -70,10 +64,8 @@ def set_parsers(subparsers):
     power_suspend_parser.add_argument('-p', '--password', dest='passwd',
                                       type=str, default=None,
                                       help='User password.')
-    power_suspend_parser.add_argument('-n', '--name', dest='vm_names',
-                                      type=str, default=None,
-                                      help='Target VM Name.', required=True,
-                                      nargs='+')
+    power_suspend_parser.add_argument('vm_names', type=str,
+                                      help='Target VM Name.', nargs='+')
     power_suspend_parser.set_defaults(func=power, power='Suspend')
     # Paused
     power_pause_parser = subparsers.add_parser('paused',
@@ -87,10 +79,8 @@ def set_parsers(subparsers):
     power_pause_parser.add_argument('-p', '--password', dest='passwd',
                                     type=str, default=None,
                                     help='User password.')
-    power_pause_parser.add_argument('-n', '--name', dest='vm_names',
-                                    type=str, default=None,
-                                    help='Target VM Name.', required=True,
-                                    nargs='+')
+    power_pause_parser.add_argument('vm_names', type=str,
+                                    help='Target VM Name.', nargs='+')
     power_pause_parser.set_defaults(func=power, power='Paused')
 
 

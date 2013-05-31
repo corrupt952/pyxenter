@@ -27,10 +27,8 @@ def set_parsers(subparsers):
                               type=str, default=None,
                               help='OVA File URL.')
 
-    deploy_parser.add_argument('-n', '--name', dest='vm_names',
-                               type=str, default=None,
-                               help='New VM name.', required=True,
-                               nargs='+')
+    deploy_parser.add_argument('vm_names', type=str,
+                               help='New VM Names.', nargs='+')
     deploy_parser.add_argument('--datacenter', dest='datacenter',
                                type=str, default=None,
                                help='Datacenter name.')
@@ -72,7 +70,7 @@ def deploy_vm(args, server):
                 raise Excepiton('File format not supported.')
 
         filepath = args.filepath
-        if not os.path.exists(filepath):
+        if os.path.exists(filepath):
             raise Exception("File not found.")
 
         if filepath.find('.ova') > 0:

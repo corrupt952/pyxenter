@@ -17,10 +17,8 @@ def set_parsers(subparsers):
     destroy_parser.add_argument('-p', '--password', dest='passwd',
                                 type=str, default=None,
                                 help='User password.')
-    destroy_parser.add_argument('-n', '--name', dest='vm_names',
-                                type=str, default=None,
-                                help='Target VM Name.', required=True,
-                                nargs='+')
+    destroy_parser.add_argument('vm_names', type=str,
+                                help='Target VM Name.', nargs='+')
     destroy_parser.set_defaults(func=destroy)
 
 

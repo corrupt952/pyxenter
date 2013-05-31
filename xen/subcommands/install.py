@@ -17,10 +17,8 @@ def set_parsers(subparsers):
     install_parser.add_argument('-p', '--password', dest='passwd',
                                 type=str, default=None,
                                 help='User password.')
-    install_parser.add_argument('-n', '--name', dest='vm_names',
-                                type=str, default=None,
-                                help='New VM name.', required=True,
-                                nargs='+')
+    install_parser.add_argument('vm_names', type=str,
+                                help='New VM name.', nargs='+')
     install_parser.add_argument('-t', '--template', dest='temp_name',
                                 type=str, default=None,
                                 help='VM template name.', required=True)
