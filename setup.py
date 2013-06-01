@@ -21,26 +21,14 @@ Features
 * nonthing
 
 
-Sub Commands
-------------
-esxi:
-| * list
-| * ip
-| * on
-| * off
-| * destroy
-| * import
-
-xen:
-| * list
-| * ip
-| * on
-| * off
-| * reboot
-| * suspend
-| * paused
-| * destroy
-| * install
+ESXi Sub Commands
+-----------------
+* list
+* ip
+* on
+* off
+* destroy
+* import
 
 
 ESXi Examples
@@ -69,6 +57,19 @@ Import OVA file with URL.
 ::
 
     $ esxi import -H [IPv4 Address of Server] -u [User name] -p [Password] --url [OVA URL] [New VM name1] [New VM name2] ...
+
+
+Xen Sub Commands
+----------------
+* list
+* ip
+* on
+* off
+* reboot
+* suspend
+* paused
+* destroy
+* install
 
 
 Xen Examples
