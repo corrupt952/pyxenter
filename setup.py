@@ -4,7 +4,7 @@ from setuptools import setup
 
 NAME = 'pyxenter'
 
-VERSION = '1.0.6'
+VERSION = '1.1.0'
 
 DESCRIPTION = 'ESXi Server and Xen Server control script.'
 
@@ -21,6 +21,28 @@ Features
 * nonthing
 
 
+Sub Commands
+------------
+esxi:
+| * list
+| * ip
+| * on
+| * off
+| * destroy
+| * import
+
+xen:
+| * list
+| * ip
+| * on
+| * off
+| * reboot
+| * suspend
+| * paused
+| * destroy
+| * install
+
+
 ESXi Examples
 -------------
 VM List.
@@ -31,7 +53,7 @@ VM List.
 VM powered on.
 ::
 
-    $ esxi on -H [IPv4 Address of Server] -u [User name] -p [Password] -n [VM name]
+    $ esxi on -H [IPv4 Address of Server] -u [User name] -p [Password] [VM name1] [VM name2] ...
 
 Get IPv4 address of VM.(Installed VMware tools)
 ::
@@ -41,17 +63,12 @@ Get IPv4 address of VM.(Installed VMware tools)
 Import OVF or OVA file with File path.
 ::
 
-    $ esxi import -H [IPv4 Address of Server] -u [User name] -p [Password] --file [OVF or OVA File path] -n [New VM name]
-
-Import OVF or OVA file with File path.(Create multiple VM)
-::
-
-    $ esxi import -H [IPv4 Address of Server] -u [User name] -p [Password] --file [OVF or OVA File path] -n [New VM name1] [new VM name2] ...
+    $ esxi import -H [IPv4 Address of Server] -u [User name] -p [Password] --file [OVF or OVA File path] [New VM name1] [new VM name2] ...
 
 Import OVA file with URL.
 ::
 
-    $ esxi import -H [IPv4 Address of Server] -u [User name] -p [Password] --url [OVA URL] -n [New VM name]
+    $ esxi import -H [IPv4 Address of Server] -u [User name] -p [Password] --url [OVA URL] [New VM name1] [New VM name2] ...
 
 
 Xen Examples
@@ -64,7 +81,7 @@ VM List.
 VM powered on.
 ::
 
-    $ xen on -U [URL of Server] -u [User name] -p [Password] -n [VM name]
+    $ xen on -U [URL of Server] -u [User name] -p [Password] [VM name1] [VM name2] ...
 
 Get IPv4 address of VM.(Installed Xen tools)
 ::
@@ -74,12 +91,12 @@ Get IPv4 address of VM.(Installed Xen tools)
 Xen VM install with template.
 ::
 
-    $ xen install -U [URL of Server] -u [User name] -p [Password] -t [Template name] -n [New VM name]
+    $ xen install -U [URL of Server] -u [User name] -p [Password] -t [Template name] [New VM name1] [New VM name2] ...
 
 Xen VM install with template.(Create multiple VM)
 ::
 
-    $ xen install -U [URL of Server] -u [User name] -p [Password] -t [Template name] -n [New VM name1] [New VM name2] ...
+    $ xen install -U [URL of Server] -u [User name] -p [Password] -t [Template name] [New VM name1] [New VM name2] ...
 
 Multiple VM control commands
 ----------------------------
