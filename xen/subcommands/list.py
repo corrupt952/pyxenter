@@ -22,6 +22,27 @@ def set_parsers(subparsers):
     list_parser.set_defaults(func=show_vm_list)
 
 
+def vm_is_condition(record, condition, session):
+    u"""VM List condition
+
+    @param condition
+
+    @return bool
+    """
+    if condition is 'template':
+        if not record["is_control_domain"] \
+                and not 'Transfer' in record["name_label"] \
+                and record["is_a_template"]:
+            return True
+    else:
+        if not record["is_control_domain"] \
+                and not 'Transfer' in record["name_label"] \
+                and not record["is_a_template"]:
+            return True
+
+    return False
+
+
 def show_vm_list(args, session):
     u"""Show vm list
 
@@ -39,10 +60,10 @@ def show_vm_list(args, session):
     print '-------------------------------------------------------'
     for vm in vms:
         record = session.xenapi.VM.get_record(vm)
-        if not record["is_control_domain"] \
-                and not 'Transfer' in record["name_label"] \
-                and record["is_a_template"] == args.template:
-            # Print VMs
+        condition = 'template' if args.template else 'plain'
+
+        if vm_is_condition(record, condition, session):
+            # Print VM
             print "| %20s " % record['name_label'],
             print "| %7s " % record['power_state'],
             tool_state = record['guest_metrics'].split(':')[1]
