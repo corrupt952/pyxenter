@@ -41,7 +41,11 @@ def destroy(args, session):
                 vdis = lib.get_storage_vdis(vm, session)
                 if vdis:
                     for vdi in vdis:
-                        session.xenapi.VDI.destroy(vdi)
+                        try:
+                            session.xenapi.VDI.destroy(vdi)
+                            print 'VDI Done.'
+                        except:
+                            print 'Cannot destroy VDI.'
 
                 session.xenapi.VM.destroy(vm)
                 print '%s Done.' % vm_name
