@@ -57,9 +57,7 @@ def get_storage_vdis(vm, session):
         vdi = session.xenapi.VBD.get_VDI(vbd)
         vdi_records = session.xenapi.VDI.get_all_records()
         if vdi.split(':')[1] != 'NULL':
-            xenstore_data = vdi_records[vdi]['xenstore_data']
-            if xenstore_data != {}:
-                vdis.append(vdi)
+            vdis.append(vdi)
     return vdis
 
 
