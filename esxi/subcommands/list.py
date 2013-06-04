@@ -28,6 +28,7 @@ def show_vm_list(args, server):
     """
     vm_paths = server.get_registered_vms()
     print '|          Name          |  Power state | IP address |'
+    print '------------------------------------------------------'
     for vm_path in vm_paths:
         vm = server.get_vm_by_path(vm_path)
         # VM name
