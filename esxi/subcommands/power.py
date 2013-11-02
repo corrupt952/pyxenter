@@ -35,7 +35,21 @@ def set_parsers(subparsers):
     power_off_parser.add_argument('vm_names', type=str,
                                   help='Target VM Names.', nargs='+')
     power_off_parser.set_defaults(func=power, power='OFF')
-
+    # Suspend
+    power_suspend_parser = subparsers.add_parser('suspend',
+                                                 help='Command of suspend VM.')
+    power_suspend_parser.add_argument('-H', '--host', dest='host',
+                                 type=str, default=None,
+                                 help='Host IPv4 address.')
+    power_suspend_parser.add_argument('-u', '--user', dest='user',
+                                      type=str, default=None,
+                                      help='User name.')
+    power_suspend_parser.add_argument('-p', '--password', dest='passwd',
+                                      type=str, default=None,
+                                      help='User password.')
+    power_suspend_parser.add_argument('vm_names', type=str,
+                                      help='Target VM Name.', nargs='+')
+    power_suspend_parser.set_defaults(func=power, power='Suspend')
 
 def power(args, server):
     u"""VM power control
@@ -54,7 +68,9 @@ def power(args, server):
                 lib.powered_on(vm, server)
             elif args.power == 'OFF':
                 lib.powered_off(vm, server)
+            elif args.power == 'Suspend':
+                lib.suspend(vm, server)
 
             print '%s Done.' % vm_name
-        except:
-            print 'Not found VM.'
+        except Exception, (strerror):
+            print strerror
