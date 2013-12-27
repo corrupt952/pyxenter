@@ -27,6 +27,7 @@ ESXi Sub Commands
 * ip
 * on
 * off
+* suspend
 * destroy
 * import
 
@@ -101,7 +102,7 @@ Xen VM install with template.(Create multiple VM)
 
 Multiple VM control commands
 ----------------------------
-* Powered commands(esxi -> on off, xen -> on off reboot suspend paused)
+* Powered commands(esxi -> on off suspend, xen -> on off reboot suspend paused)
 * Import commands(esxi -> import, xen -> install)
 * Destroy commands(destroy)
 

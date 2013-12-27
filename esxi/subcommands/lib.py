@@ -492,7 +492,7 @@ def powered_on(vm, server):
     @param vm     VM
     @param server Instance of VIServer
     """
-    if vm.is_powered_off():
+    if vm.is_powered_off() or vm.is_suspended():
         print 'Powered on...'
         try:
             vm.power_on()
@@ -517,6 +517,27 @@ def powered_off(vm, server):
     else:
         print 'Already Powered Off.'
 
+def suspend(vm, server):
+    u"""VM suspend
+
+    Power state being 'Suspend'
+
+    @param vm      VM
+    @param server Instance og VIServer
+    """
+    from pkg_resources import get_distribution, parse_version
+    if parse_version(get_distribution('pysphere').version) < parse_version('0.1.5'):
+        raise Exception("Don't support suspend.")
+
+    if vm.is_powered_on():
+        print 'Suspending...'
+        try:
+            vm.suspend()
+            print 'Done.'
+        except:
+            raise Exception('Suspend error.')
+    else:
+        print 'Cannot suspend.'
 
 def delete_vm_by_path(path, server, remove_files=True):
     """Delete VM
