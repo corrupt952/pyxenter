@@ -141,7 +141,7 @@ def deploy_vm(args, server):
                                                      server=server)
 
                 if hasattr(import_spec, "Warning"):
-                    print "Warning", import_spce.Warning[0].LocalizedMessage
+                    print "Warning", import_spec.Warning[0].LocalizedMessage
 
                 http_nfc_lease = lib.import_vapp(resource_pool_name,
                                                  import_spec,
