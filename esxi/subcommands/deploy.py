@@ -67,7 +67,7 @@ def deploy_vm(args, server):
             if args.file_url.find('.ova') > 0:
                 args.filepath = lib.download_file(args.file_url, download_temp)
             else:
-                raise Excepiton('File format not supported.')
+                raise Exception('File format not supported.')
 
         filepath = args.filepath
         if os.path.exists(filepath):
